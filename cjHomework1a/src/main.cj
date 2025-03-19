@@ -1,4 +1,4 @@
-package cjHomework1
+package cjHomework1a
 
 import std.collection.*
 import std.console.*
@@ -6,6 +6,7 @@ import std.convert.*
 import std.core.*
 
 main(): Int64 {
+    println("请输入数字：")
     let str = Console.stdIn.readln().getOrThrow()
     let n = UInt64.tryParse(str).getOrThrow()
     var lastLine = ArrayList<UInt64>()
