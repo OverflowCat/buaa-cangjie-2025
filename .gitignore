@@ -2,5 +2,6 @@ target
 *.zip
 *.exe
 *.json
+*.lock
 .cache
 
