@@ -5,20 +5,23 @@ import std.console.*
 import std.convert.*
 
 func readParam(end!: Bool = false): String {
-    let char = if (end) {
-        r'\n'
+    let s = if (end) {
+        Console.stdIn.readln()
     } else {
-        r' '
+        Console.stdIn.readUntil(r' ')
     }
-    Console.stdIn.readUntil(char).getOrThrow().trimRight(" ")
+    // println("Got param: " + s.getOrThrow())
+    s.getOrThrow().trimAsciiRight()
 }
 
 func readMoneyParam(end!: Bool = false): Int64 {
-    Int64(Float64.tryParse(readParam()).getOrThrow() * 100.0)
+    Float64.tryParse(readParam(end: end)).getOrThrow() |> f2money
 }
 
 main(): Unit {
     let bank = Bank()
+    let h = History()
+    let history = h.print
     func create(): Unit {
         let category = if (readMoneyParam() == 1) {
             Category.SavingsAccount
@@ -33,28 +36,44 @@ main(): Unit {
     func deposit(): Unit {
         let account = readParam()
         let amount = readMoneyParam(end: true)
+        h.add("deposit", amount)
         bank.deposite(account, amount)
     }
     func withdraw(): Unit {
         let account = readParam()
         let amount = readMoneyParam(end: true)
+        h.add("withdraw", amount)
         bank.withdraw(account, amount)
     }
+    func transfer(): Unit {
+        let from = readParam()
+        let to = readParam()
+        let amount = readMoneyParam(end: true)
+        h.add("transfer", amount)
+        bank.xfer(from, to, amount)
+    }
     func info(): Unit {
-        let account = readParam(end: true)
-        println("Unimplemented")
+        let account = readParam(end: true) |> bank.get
+        match (account) {
+            case Some(a) => a.info()
+            case None => println("Error")
+        }
     }
 
     while (true) {
         let action = Console.stdIn.readUntil(r' ').getOrThrow().trimRight(" ")
-        println(action)
+        // println("action: " + action)
         match (action) {
             case "create" => create()
             case "deposit" => deposit()
             case "withdraw" => withdraw()
+            case "transfer" => transfer()
             case "info" => info()
+            case "history" => history()
             case "Exit" => break
-            case _ => println("Invalid command")
+            case _ =>
+                println("Invalid command")
+                return
         }
     }
 }
