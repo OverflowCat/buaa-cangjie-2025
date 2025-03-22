@@ -19,7 +19,11 @@ class Bank {
             println("Error")
             return
         }
-        accounts.put(id, Account(category, name, id, balance))
+        let account = match (category) {
+            case SavingsAccount => SavingsAccount(name, id, balance)
+            case CheckingAccount => CheckingAccount(name, id, balance)
+        }
+        accounts.put(id, account)
     }
 
     public func xfer(from: AccoundUuid, to: AccoundUuid, amount: Int64): Unit {
