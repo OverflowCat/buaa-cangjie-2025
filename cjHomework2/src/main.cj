@@ -3,15 +3,18 @@ package cjHomework2
 import std.io.*
 import std.console.*
 import std.convert.*
+import std.collection.*
+
+var args = ArrayList<String>()
+var i = 0
 
 func readParam(end!: Bool = false): String {
-    let s = if (end) {
-        Console.stdIn.readln()
-    } else {
-        Console.stdIn.readUntil(r' ')
+    let arg = args[i]
+    i += 1
+    if (end) {
+        i = 0
     }
-    // println("Got param: " + s.getOrThrow())
-    s.getOrThrow().trimAsciiRight()
+    return arg
 }
 
 func readMoneyParam(end!: Bool = false): Int64 {
@@ -61,8 +64,20 @@ main(): Unit {
     }
 
     while (true) {
-        let action = Console.stdIn.readUntil(r' ').getOrThrow().trimRight(" ")
-        // println("action: " + action)
+        var input = Console.stdIn.readln()
+        if (input.isNone()) {
+            continue
+        }
+        var line = input.getOrThrow()
+        // 删掉注释
+        if (line.contains("#")) {
+            line = line.split("#")[0]
+            line = line.trimAscii()
+        }
+        let parts = line.split(' ')
+        let action = parts[0]
+        args = ArrayList(parts[1..])
+
         match (action) {
             case "create" => create()
             case "deposit" => deposit()

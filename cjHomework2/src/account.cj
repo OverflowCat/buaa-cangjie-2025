@@ -18,12 +18,11 @@ class Account {
     public func info(): Unit {
         // info <账号>，输出格式为账户类型+账号+用户名+余额，如“saving account, id: 101, owner: zhangsan, balance: 100.00”
         match (category) {
-            case SavingsAccount =>
-                print("saving account")
-            case CheckingAccount =>
-                print("checking account")
+            case SavingsAccount => print("saving account")
+            case CheckingAccount => print("checking account")
         }
-        print(", id: " + id.toString() + ", owner: " + name + ", balance: " + balance.toString())
+        print(", id: " + id.toString() + ", owner: " + name + ", balance: ")
+        println(balance |> money2s)
     }
 
     public func deposit(amount: Int64): Unit {
@@ -41,6 +40,4 @@ class Account {
                 balance
         }
     }
-
-    
 }
