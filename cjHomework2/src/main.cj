@@ -27,9 +27,9 @@ main(): Unit {
     let history = h.print
     func create(): Unit {
         let category = if (readMoneyParam() == 1) {
-            Category.SavingsAccount
-        } else {
             Category.CheckingAccount
+        } else {
+            Category.SavingsAccount
         }
         let name = readParam()
         let account = readParam()
@@ -64,6 +64,8 @@ main(): Unit {
     }
 
     while (true) {
+        i = 0
+        args = ArrayList<String>()
         var input = Console.stdIn.readln()
         if (input.isNone()) {
             continue
@@ -75,6 +77,9 @@ main(): Unit {
             line = line.trimAscii()
         }
         let parts = line.split(' ')
+        if (parts.isEmpty()) {
+            continue
+        }
         let action = parts[0]
         args = ArrayList(parts[1..])
 
