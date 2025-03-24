@@ -1,7 +1,8 @@
 target
+*.pdf
+*.svg
 *.zip
 *.exe
 *.json
 *.lock
 .cache
-
